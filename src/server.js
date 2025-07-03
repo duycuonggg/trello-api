@@ -20,9 +20,15 @@ const START_SERVER = () => {
   // midleware xử lý lỗi tập chung
   app.use(errorHandlingMiddleware)
 
-  app.listen(env.APP_PORT, env.APP_HOST, () => {
-    console.log(`Hello ${env.AUTHOR}, I am running at ${env.APP_HOST}:${env.APP_PORT}/`)
-  })
+  if (env.BUILD_MODE === 'production') {
+    app.listen(process.env.PORT, () => {
+      console.log(`Production Hello ${env.AUTHOR}, Back-end sever is running successfully at Port ${process.env.PORT}`)
+    })
+  } else {
+    app.listen(env.LOCAL_DEV_APP_PORT, env.LOCAL_DEV_APP_HOST, () => {
+      console.log(`Local Dev Hello ${env.AUTHOR}, Back-end sever is running successfully at Host ${env.LOCAL_DEV_APP_HOST} and Port: ${env.LOCAL_DEV_APP_PORT}`)
+    })
+  }
 
   // thực hiện tác vụ cleanup trước khi dừng server lại
   exitHook(() => {
